@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local VirtualUser = game:GetService("VirtualUser")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
+local TweenService = game:GetService("TweenService")
 
 local fileName = "Phantom_" .. tostring(Player.UserId) .. ".json"
 local savedSettings = {}
@@ -181,6 +182,109 @@ local options = {Main = {}, Buy = {}, Farm = {}, Config = {}, Credits = {}}
 local activeTab = "Main"
 local expandedOptions = {}
 local allSubFrames = {}
+
+local notificationTimers = {}
+
+local function showNotification(title, iconId, duration)
+	local notificationScreenGui = Instance.new("ScreenGui")
+	notificationScreenGui.Name = "NotificationScreenGui"
+	notificationScreenGui.ResetOnSpawn = false
+	notificationScreenGui.Parent = PlayerGui
+	
+	local notificationGui = Instance.new("Frame")
+	notificationGui.Name = "NotificationGui"
+	notificationGui.Size = UDim2.new(0, 300, 0, 60)
+	notificationGui.Position = UDim2.new(1, 20, 1, -100)
+	notificationGui.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	notificationGui.BorderSizePixel = 2
+	notificationGui.BorderColor3 = Color3.fromRGB(128, 128, 128)
+	notificationGui.Parent = notificationScreenGui
+
+	local notificationIcon = Instance.new("ImageLabel")
+	notificationIcon.Name = "NotificationIcon"
+	notificationIcon.Size = UDim2.new(0, 40, 0, 40)
+	notificationIcon.Position = UDim2.new(0, 10, 0.5, -20)
+	notificationIcon.BackgroundTransparency = 1
+	notificationIcon.Image = "rbxassetid://" .. iconId
+	notificationIcon.Parent = notificationGui
+
+	local notificationLabel = Instance.new("TextLabel")
+	notificationLabel.Name = "NotificationLabel"
+	notificationLabel.Size = UDim2.new(1, -60, 1, 0)
+	notificationLabel.Position = UDim2.new(0, 50, 0, 0)
+	notificationLabel.BackgroundTransparency = 1
+	notificationLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	notificationLabel.TextSize = 14
+	notificationLabel.Font = Enum.Font.Gotham
+	notificationLabel.Text = title
+	notificationLabel.TextWrapped = true
+	notificationLabel.TextXAlignment = Enum.TextXAlignment.Left
+	notificationLabel.Parent = notificationGui
+
+	local progressLine = Instance.new("Frame")
+	progressLine.Name = "ProgressLine"
+	progressLine.Size = UDim2.new(0, 0, 0, 2)
+	progressLine.Position = UDim2.new(0, 0, 1, 0)
+	progressLine.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	progressLine.BorderSizePixel = 0
+	progressLine.Parent = notificationGui
+
+	local startTime = tick()
+	local totalWidth = 300
+	local notificationId = tostring(math.random(100000, 999999))
+
+	notificationTimers[notificationId] = {
+		startTime = startTime,
+		duration = duration,
+		gui = notificationGui,
+		screenGui = notificationScreenGui
+	}
+
+	local slideInTween = TweenService:Create(
+		notificationGui,
+		TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+		{Position = UDim2.new(1, -320, 1, -100)}
+	)
+	slideInTween:Play()
+
+	local progressConnection
+	progressConnection = RunService.RenderStepped:Connect(function()
+		if notificationTimers[notificationId] == nil then
+			progressConnection:Disconnect()
+			return
+		end
+
+		local elapsed = tick() - notificationTimers[notificationId].startTime
+		local progress = math.min(elapsed / notificationTimers[notificationId].duration, 1)
+
+		if notificationGui and notificationGui.Parent then
+			progressLine.Size = UDim2.new(0, totalWidth * progress, 0, 2)
+		end
+
+		if progress >= 1 then
+			progressConnection:Disconnect()
+
+			if notificationGui and notificationGui.Parent then
+				local slideOutTween = TweenService:Create(
+					notificationGui,
+					TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+					{Position = UDim2.new(1, 20, 1, -100)}
+				)
+				slideOutTween:Play()
+
+				slideOutTween.Completed:Connect(function()
+					if notificationGui then
+						notificationGui:Destroy()
+					end
+					if notificationScreenGui then
+						notificationScreenGui:Destroy()
+					end
+					notificationTimers[notificationId] = nil
+				end)
+			end
+		end
+	end)
+end
 
 local function createTabBtn(name, posIdx, iconId)
     local Btn = Instance.new("TextButton")
@@ -505,6 +609,7 @@ local function createInfoBox(title, desc, tab, isButton, linkToCopy)
         ClickBtn.ZIndex = 999
         ClickBtn.MouseButton1Click:Connect(function()
             if type(setclipboard) == "function" then pcall(function() setclipboard(linkToCopy) end) end
+            showNotification("Discord Link Copied", "132744109593099", 2.85)
         end)
     end
 
@@ -1304,7 +1409,6 @@ local shiftLockActive = false
 local shiftLockGui = nil
 local shiftLockBtn = nil
 local shiftLockConnection = nil
-local TweenService = game:GetService("TweenService")
 
 local function getCharacterForShiftLock()
     local character = Player.Character or Player.CharacterAdded:Wait()
