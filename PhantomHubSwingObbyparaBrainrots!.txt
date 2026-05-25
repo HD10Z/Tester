@@ -182,17 +182,13 @@ local activeTab = "Main"
 local expandedOptions = {}
 local allSubFrames = {}
 
-local tabButtons = {}
-local normalTabColor = Color3.fromRGB(60, 60, 60)
-local selectedTabColor = Color3.fromRGB(40, 40, 40)
-
 local function createTabBtn(name, posIdx, iconId)
     local Btn = Instance.new("TextButton")
     Btn.Size = UDim2.new(0.85, 0, 0, 40)
     Btn.Position = UDim2.new(0.075, 0, 0, 20 + (posIdx * 50))
-    Btn.BackgroundColor3 = normalTabColor
+    Btn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Btn.Text = name
+    Btn.Text = ""
     Btn.Font = Enum.Font.SourceSansBold
     Btn.TextSize = 18
     Btn.Parent = SideBar
@@ -200,40 +196,43 @@ local function createTabBtn(name, posIdx, iconId)
     Btn.ZIndex = 999
     Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 0)
 
+    local BtnContainer = Instance.new("Frame")
+    BtnContainer.Size = UDim2.new(1, 0, 1, 0)
+    BtnContainer.BackgroundTransparency = 1
+    BtnContainer.Parent = Btn
+    BtnContainer.ZIndex = 999
+
     local IconLabel = Instance.new("ImageLabel")
-    IconLabel.Size = UDim2.new(0, 20, 0, 20)
-    IconLabel.Position = UDim2.new(0, 8, 0.5, -10)
+    IconLabel.Size = UDim2.new(0, 24, 0, 24)
+    IconLabel.Position = UDim2.new(0, 8, 0.5, -12)
     IconLabel.BackgroundTransparency = 1
-    IconLabel.Image = "rbxassetid://" .. iconId
-    IconLabel.Parent = Btn
+    IconLabel.Image = "rbxasset://textures/Cursors/MouseLockedCursor.png"
+    if iconId then
+        IconLabel.Image = "rbxassetid://" .. iconId
+    end
+    IconLabel.Parent = BtnContainer
     IconLabel.ZIndex = 999
 
     local TextLabel = Instance.new("TextLabel")
     TextLabel.Size = UDim2.new(1, -40, 1, 0)
-    TextLabel.Position = UDim2.new(0, 30, 0, 0)
+    TextLabel.Position = UDim2.new(0, 40, 0, 0)
+    TextLabel.BackgroundTransparency = 1
     TextLabel.Text = name
     TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TextLabel.BackgroundTransparency = 1
     TextLabel.TextXAlignment = Enum.TextXAlignment.Left
     TextLabel.Font = Enum.Font.SourceSansBold
-    TextLabel.TextSize = 16
-    TextLabel.Parent = Btn
+    TextLabel.TextSize = 18
+    TextLabel.Parent = BtnContainer
     TextLabel.ZIndex = 999
-
-    Btn.Text = ""
-
-    tabButtons[name] = Btn
 
     return Btn
 end
 
 local TabMain = createTabBtn("Main", 0, "139357095045310")
-local TabBuy = createTabBtn("Buy ALL", 1, "130133889227800")
-local TabFarm = createTabBtn("Farm", 2, "102352181267949")
-local TabConfig = createTabBtn("Config", 3, "80914579074622")
-local TabCredits = createTabBtn("Credits", 4, "105767282228867")
-
-TabMain.BackgroundColor3 = selectedTabColor
+local TabFarm = createTabBtn("Farm", 1, "102352181267949")
+local TabBuy = createTabBtn("Buy ALL", 2, "110805385284419")
+local TabConfig = createTabBtn("Config", 3, "114794077382466")
+local TabCredits = createTabBtn("Credits", 4, "99243311837005")
 
 local function repositionElements(tab)
     local yPos = 0
@@ -268,7 +267,7 @@ local function createOption(name, startActive, tab, callback)
 
     local Container = Instance.new("Frame")
     Container.Size = UDim2.new(0.95, 0, 0, 50)
-    Container.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    Container.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Container.Visible = (tab == activeTab)
     Container.Parent = MainContent
     Container.Name = name
@@ -277,7 +276,7 @@ local function createOption(name, startActive, tab, callback)
 
     local ContainerStroke = Instance.new("UIStroke")
     ContainerStroke.Color = Color3.fromRGB(60, 60, 60)
-    ContainerStroke.Thickness = 2
+    ContainerStroke.Thickness = 0
     ContainerStroke.Parent = Container
 
     local Label = Instance.new("TextLabel")
@@ -367,7 +366,7 @@ local function createSlider(name, min, max, default, tab, callback)
 
     local Container = Instance.new("Frame")
     Container.Size = UDim2.new(0.95, 0, 0, 60)
-    Container.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    Container.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Container.Visible = (tab == activeTab)
     Container.Parent = MainContent
     Container.ZIndex = 999
@@ -375,7 +374,7 @@ local function createSlider(name, min, max, default, tab, callback)
 
     local SliderStroke = Instance.new("UIStroke")
     SliderStroke.Color = Color3.fromRGB(60, 60, 60)
-    SliderStroke.Thickness = 2
+    SliderStroke.Thickness = 0
     SliderStroke.Parent = Container
 
     local Label = Instance.new("TextLabel")
@@ -462,7 +461,7 @@ end
 local function createInfoBox(title, desc, tab, isButton, linkToCopy)
     local Container = Instance.new("Frame")
     Container.Size = UDim2.new(0.95, 0, 0, 45)
-    Container.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    Container.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Container.Visible = (tab == activeTab)
     Container.Parent = MainContent
     Container.ZIndex = 999
@@ -470,7 +469,7 @@ local function createInfoBox(title, desc, tab, isButton, linkToCopy)
 
     local InfoStroke = Instance.new("UIStroke")
     InfoStroke.Color = Color3.fromRGB(60, 60, 60)
-    InfoStroke.Thickness = 2
+    InfoStroke.Thickness = 0
     InfoStroke.Parent = Container
 
     local TitleLabel = Instance.new("TextLabel")
@@ -516,7 +515,7 @@ end
 local function createSpecialButton(name, tab, callback)
     local Container = Instance.new("Frame")
     Container.Size = UDim2.new(0.95, 0, 0, 50)
-    Container.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    Container.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Container.Visible = (tab == activeTab)
     Container.Parent = MainContent
     Container.Name = name
@@ -525,7 +524,7 @@ local function createSpecialButton(name, tab, callback)
 
     local ContainerStroke = Instance.new("UIStroke")
     ContainerStroke.Color = Color3.fromRGB(60, 60, 60)
-    ContainerStroke.Thickness = 2
+    ContainerStroke.Thickness = 0
     ContainerStroke.Parent = Container
 
     local Label = Instance.new("TextLabel")
@@ -901,38 +900,50 @@ local function showTab(tabName)
     repositionElements(tabName)
 end
 
-local function updateTabColors(selectedTabName)
-    for tabName, tabBtn in pairs(tabButtons) do
-        if tabName == selectedTabName then
-            tabBtn.BackgroundColor3 = selectedTabColor
-        else
-            tabBtn.BackgroundColor3 = normalTabColor
-        end
-    end
-end
+TabMain.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
 
 TabMain.MouseButton1Click:Connect(function()
-    updateTabColors("Main")
+    TabMain.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabBuy.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabFarm.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabConfig.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabCredits.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     showTab("Main")
 end)
 
 TabBuy.MouseButton1Click:Connect(function()
-    updateTabColors("Buy ALL")
+    TabMain.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabBuy.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabFarm.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabConfig.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabCredits.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     showTab("Buy")
 end)
 
 TabFarm.MouseButton1Click:Connect(function()
-    updateTabColors("Farm")
+    TabMain.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabBuy.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabFarm.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabConfig.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabCredits.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     showTab("Farm")
 end)
 
 TabConfig.MouseButton1Click:Connect(function()
-    updateTabColors("Config")
+    TabMain.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabBuy.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabFarm.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabConfig.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabCredits.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     showTab("Config")
 end)
 
 TabCredits.MouseButton1Click:Connect(function()
-    updateTabColors("Credits")
+    TabMain.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabBuy.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabFarm.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabConfig.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    TabCredits.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     showTab("Credits")
 end)
 
