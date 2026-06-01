@@ -580,10 +580,10 @@ local function createInfoBox(title, desc, tab, isButton, linkToCopy)
     TitleLabel.Size = UDim2.new(0.9, 0, 0.5, 0)
     TitleLabel.Position = UDim2.new(0.05, 0, 0, 3)
     TitleLabel.Text = title
-    TitleLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    TitleLabel.Font = Enum.Font.SourceSans
+    TitleLabel.Font = Enum.Font.SourceSansBold
     TitleLabel.TextSize = 16
     TitleLabel.Parent = Container
     TitleLabel.ZIndex = 999
