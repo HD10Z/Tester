@@ -58,7 +58,6 @@ FloatingButton.Text = ""
 FloatingButton.Parent = ScreenGui
 FloatingButton.AutoButtonColor = false
 FloatingButton.ZIndex = 1000
-FloatingButton.ScaleType = Enum.ScaleType.Stretch
 
 local UICornerBtn = Instance.new("UICorner")
 UICornerBtn.CornerRadius = UDim.new(0, 0)
@@ -88,13 +87,12 @@ BtnLabel.Parent = InnerBtn
 BtnLabel.ZIndex = 1002
 
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 550, 0, 320)
-MainFrame.Position = UDim2.new(0.5, -275, 0.5, -160)
+MainFrame.Size = UDim2.new(0, 650, 0, 400)
+MainFrame.Position = UDim2.new(0.5, -325, 0.5, -200)
 MainFrame.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 MainFrame.Visible = false
 MainFrame.Parent = ScreenGui
 MainFrame.ZIndex = 999
-MainFrame.ScaleType = Enum.ScaleType.Stretch
 
 local UICornerFrame = Instance.new("UICorner")
 UICornerFrame.CornerRadius = UDim.new(0, 0)
@@ -192,7 +190,6 @@ local function showNotification(title, iconId, duration)
 	notificationScreenGui.Name = "NotificationScreenGui"
 	notificationScreenGui.ResetOnSpawn = false
 	notificationScreenGui.Parent = PlayerGui
-	notificationScreenGui.ScaleType = Enum.ScaleType.Stretch
 	
 	local notificationGui = Instance.new("Frame")
 	notificationGui.Name = "NotificationGui"
@@ -202,7 +199,6 @@ local function showNotification(title, iconId, duration)
 	notificationGui.BorderSizePixel = 2
 	notificationGui.BorderColor3 = Color3.fromRGB(128, 128, 128)
 	notificationGui.Parent = notificationScreenGui
-	notificationGui.ScaleType = Enum.ScaleType.Stretch
 
 	local notificationIcon = Instance.new("ImageLabel")
 	notificationIcon.Name = "NotificationIcon"
@@ -584,7 +580,7 @@ local function createInfoBox(title, desc, tab, isButton, linkToCopy)
     TitleLabel.Size = UDim2.new(0.9, 0, 0.5, 0)
     TitleLabel.Position = UDim2.new(0.05, 0, 0, 3)
     TitleLabel.Text = title
-    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     TitleLabel.Font = Enum.Font.SourceSans
@@ -1478,7 +1474,6 @@ local isShiftLock = createOption("Enable Shift Lock", false, "Config", function(
             shiftLockGui.Name = "ShiftLockGUI"
             shiftLockGui.ResetOnSpawn = false
             shiftLockGui.Parent = PlayerGui
-            shiftLockGui.ScaleType = Enum.ScaleType.Stretch
             
             shiftLockBtn = Instance.new("ImageButton")
             shiftLockBtn.Size = UDim2.new(0, 50, 0, 50)
@@ -1486,7 +1481,6 @@ local isShiftLock = createOption("Enable Shift Lock", false, "Config", function(
             shiftLockBtn.BackgroundTransparency = 1
             shiftLockBtn.Image = "rbxassetid://139211296111194"
             shiftLockBtn.Parent = shiftLockGui
-            shiftLockBtn.ScaleType = Enum.ScaleType.Stretch
             
             shiftLockBtn.Activated:Connect(function()
                 if shiftLockActive then
