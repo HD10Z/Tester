@@ -170,7 +170,7 @@ SideBar.Parent = InnerFrame
 SideBar.ZIndex = 999
 
 local MainContent = Instance.new("ScrollingFrame")
-MainContent.Size = UDim2.new(1, -155, 1, -60)
+MainContent.Size = UDim2.new(1, -150, 1, -60)
 MainContent.Position = UDim2.new(0, 145, 0, 45)
 MainContent.BackgroundTransparency = 1
 MainContent.ScrollBarThickness = 2
@@ -370,7 +370,7 @@ local function createOption(name, startActive, tab, callback)
     local currentActive = optionStates[name]
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -10, 0, 50)
+    Container.Size = UDim2.new(1, -16, 0, 50)
     Container.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Container.Visible = (tab == activeTab)
     Container.Parent = MainContent
@@ -469,7 +469,7 @@ local function createSlider(name, min, max, default, tab, callback)
     local currentVal = optionStates[name]
 
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -10, 0, 60)
+    Container.Size = UDim2.new(1, -16, 0, 60)
     Container.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Container.Visible = (tab == activeTab)
     Container.Parent = MainContent
@@ -564,7 +564,7 @@ end
 
 local function createInfoBox(title, desc, tab, isButton, linkToCopy)
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -10, 0, 45)
+    Container.Size = UDim2.new(1, -16, 0, 45)
     Container.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Container.Visible = (tab == activeTab)
     Container.Parent = MainContent
@@ -619,7 +619,7 @@ end
 
 local function createSpecialButton(name, tab, callback)
     local Container = Instance.new("Frame")
-    Container.Size = UDim2.new(1, -10, 0, 50)
+    Container.Size = UDim2.new(1, -16, 0, 50)
     Container.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     Container.Visible = (tab == activeTab)
     Container.Parent = MainContent
