@@ -87,8 +87,8 @@ BtnLabel.Parent = InnerBtn
 BtnLabel.ZIndex = 1002
 
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 550, 0, 320)
-MainFrame.Position = UDim2.new(0.5, -275, 0.5, -160)
+MainFrame.Size = UDim2.new(0.5, 0, 0.5, 0)
+MainFrame.Position = UDim2.new(0.25, 0, 0.25, 0)
 MainFrame.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 MainFrame.Visible = false
 MainFrame.Parent = ScreenGui
