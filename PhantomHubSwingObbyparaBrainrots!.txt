@@ -51,14 +51,13 @@ ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = PlayerGui
 
 local FloatingButton = Instance.new("TextButton")
-FloatingButton.Size = UDim2.new(0, 60, 0, 60)
-FloatingButton.Position = UDim2.new(0, 50, 0.15, -30)
+FloatingButton.Size = UDim2.new(0, 54, 0, 54)
+FloatingButton.Position = UDim2.new(0, 50, 0.15, -27)
 FloatingButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 FloatingButton.Text = ""
 FloatingButton.Parent = ScreenGui
 FloatingButton.AutoButtonColor = false
 FloatingButton.ZIndex = 1000
-FloatingButton.ScaleType = Enum.ScaleType.Stretch
 
 local UICornerBtn = Instance.new("UICorner")
 UICornerBtn.CornerRadius = UDim.new(0, 0)
@@ -70,8 +69,8 @@ FloatingButtonStroke.Thickness = 2
 FloatingButtonStroke.Parent = FloatingButton
 
 local InnerBtn = Instance.new("Frame")
-InnerBtn.Size = UDim2.new(0, 54, 0, 54)
-InnerBtn.Position = UDim2.new(0.5, -27, 0.5, -27)
+InnerBtn.Size = UDim2.new(0, 48, 0, 48)
+InnerBtn.Position = UDim2.new(0.5, -24, 0.5, -24)
 InnerBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 InnerBtn.Parent = FloatingButton
 InnerBtn.ZIndex = 1001
