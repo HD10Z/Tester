@@ -94,6 +94,23 @@ MainFrame.Visible = false
 MainFrame.Parent = ScreenGui
 MainFrame.ZIndex = 999
 
+local mainUIScale = Instance.new("UIScale")
+mainUIScale.Parent = MainFrame
+
+local function updateMainFrameScale()
+    local viewport = workspace.CurrentCamera.ViewportSize
+    if viewport.X < 700 then
+        mainUIScale.Scale = 0.8
+    elseif viewport.X > 1200 then
+        mainUIScale.Scale = 1.2
+    else
+        mainUIScale.Scale = 1
+    end
+end
+
+updateMainFrameScale()
+workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(updateMainFrameScale)
+
 local UICornerFrame = Instance.new("UICorner")
 UICornerFrame.CornerRadius = UDim.new(0, 0)
 UICornerFrame.Parent = MainFrame
@@ -199,6 +216,23 @@ local function showNotification(title, iconId, duration)
 	notificationGui.BorderSizePixel = 2
 	notificationGui.BorderColor3 = Color3.fromRGB(128, 128, 128)
 	notificationGui.Parent = notificationScreenGui
+
+	local notificationUIScale = Instance.new("UIScale")
+	notificationUIScale.Parent = notificationGui
+
+	local function updateNotificationScale()
+		local viewport = workspace.CurrentCamera.ViewportSize
+		if viewport.X < 700 then
+			notificationUIScale.Scale = 0.8
+		elseif viewport.X > 1200 then
+			notificationUIScale.Scale = 1.2
+		else
+			notificationUIScale.Scale = 1
+		end
+	end
+
+	updateNotificationScale()
+	workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(updateNotificationScale)
 
 	local notificationIcon = Instance.new("ImageLabel")
 	notificationIcon.Name = "NotificationIcon"
