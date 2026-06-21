@@ -1,0 +1,489 @@
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+local RunService = game:GetService("RunService")
+
+local LocalPlayer = Players.LocalPlayer or Players:GetPropertyChangedSignal("LocalPlayer"):Wait()
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+local guiName = "PolleserHubStablePanel"
+local oldGui = PlayerGui:FindFirstChild(guiName)
+if oldGui then
+    oldGui:Destroy()
+end
+
+local originalLighting = {
+    Ambient = Lighting.Ambient,
+    Brightness = Lighting.Brightness,
+    ClockTime = Lighting.ClockTime,
+    FogEnd = Lighting.FogEnd,
+    GlobalShadows = Lighting.GlobalShadows,
+    OutdoorAmbient = Lighting.OutdoorAmbient,
+}
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = guiName
+screenGui.ResetOnSpawn = false
+screenGui.IgnoreGuiInset = true
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = PlayerGui
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 520, 0, 360)
+mainFrame.Position = UDim2.new(0.5, -260, 0.5, -180)
+mainFrame.BackgroundColor3 = Color3.fromRGB(17, 24, 39)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 14)
+mainCorner.Parent = mainFrame
+
+local mainStroke = Instance.new("UIStroke")
+mainStroke.Color = Color3.fromRGB(59, 130, 246)
+mainStroke.Thickness = 1.5
+mainStroke.Transparency = 0.25
+mainStroke.Parent = mainFrame
+
+local titleBar = Instance.new("Frame")
+titleBar.Name = "TitleBar"
+titleBar.Size = UDim2.new(1, 0, 0, 48)
+titleBar.BackgroundColor3 = Color3.fromRGB(15, 23, 42)
+titleBar.BorderSizePixel = 0
+titleBar.Parent = mainFrame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 14)
+titleCorner.Parent = titleBar
+
+local titleMask = Instance.new("Frame")
+titleMask.Name = "TitleMask"
+titleMask.Size = UDim2.new(1, 0, 0, 16)
+titleMask.Position = UDim2.new(0, 0, 1, -16)
+titleMask.BackgroundColor3 = titleBar.BackgroundColor3
+titleMask.BorderSizePixel = 0
+titleMask.Parent = titleBar
+
+local title = Instance.new("TextLabel")
+title.Name = "Title"
+title.Size = UDim2.new(1, -118, 1, 0)
+title.Position = UDim2.new(0, 18, 0, 0)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.GothamBold
+title.Text = "Guts & Blackpowder | Stable Panel"
+title.TextColor3 = Color3.fromRGB(239, 246, 255)
+title.TextSize = 16
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = titleBar
+
+local version = Instance.new("TextLabel")
+version.Name = "Version"
+version.Size = UDim2.new(0, 90, 0, 20)
+version.Position = UDim2.new(0, 20, 0, 46)
+version.BackgroundTransparency = 1
+version.Font = Enum.Font.Gotham
+version.Text = "Version: 1.1.0"
+version.TextColor3 = Color3.fromRGB(125, 211, 252)
+version.TextSize = 12
+version.TextXAlignment = Enum.TextXAlignment.Left
+version.Parent = mainFrame
+
+local closeButton = Instance.new("TextButton")
+closeButton.Name = "CloseButton"
+closeButton.Size = UDim2.new(0, 34, 0, 30)
+closeButton.Position = UDim2.new(1, -42, 0, 9)
+closeButton.BackgroundColor3 = Color3.fromRGB(220, 38, 38)
+closeButton.BorderSizePixel = 0
+closeButton.AutoButtonColor = false
+closeButton.Font = Enum.Font.GothamBold
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.TextSize = 14
+closeButton.Parent = titleBar
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 8)
+closeCorner.Parent = closeButton
+
+local minimizeButton = Instance.new("TextButton")
+minimizeButton.Name = "MinimizeButton"
+minimizeButton.Size = UDim2.new(0, 34, 0, 30)
+minimizeButton.Position = UDim2.new(1, -82, 0, 9)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(30, 64, 175)
+minimizeButton.BorderSizePixel = 0
+minimizeButton.AutoButtonColor = false
+minimizeButton.Font = Enum.Font.GothamBold
+minimizeButton.Text = "-"
+minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimizeButton.TextSize = 18
+minimizeButton.Parent = titleBar
+
+local minCorner = Instance.new("UICorner")
+minCorner.CornerRadius = UDim.new(0, 8)
+minCorner.Parent = minimizeButton
+
+local tabsFrame = Instance.new("Frame")
+tabsFrame.Name = "Tabs"
+tabsFrame.Size = UDim2.new(0, 132, 1, -70)
+tabsFrame.Position = UDim2.new(0, 16, 0, 70)
+tabsFrame.BackgroundColor3 = Color3.fromRGB(15, 23, 42)
+tabsFrame.BorderSizePixel = 0
+tabsFrame.Parent = mainFrame
+
+local tabsCorner = Instance.new("UICorner")
+tabsCorner.CornerRadius = UDim.new(0, 10)
+tabsCorner.Parent = tabsFrame
+
+local tabLayout = Instance.new("UIListLayout")
+tabLayout.Padding = UDim.new(0, 8)
+tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+tabLayout.Parent = tabsFrame
+
+local tabPadding = Instance.new("UIPadding")
+tabPadding.PaddingTop = UDim.new(0, 10)
+tabPadding.PaddingLeft = UDim.new(0, 10)
+tabPadding.PaddingRight = UDim.new(0, 10)
+tabPadding.Parent = tabsFrame
+
+local contentFrame = Instance.new("Frame")
+contentFrame.Name = "Content"
+contentFrame.Size = UDim2.new(1, -172, 1, -70)
+contentFrame.Position = UDim2.new(0, 156, 0, 70)
+contentFrame.BackgroundColor3 = Color3.fromRGB(15, 23, 42)
+contentFrame.BorderSizePixel = 0
+contentFrame.Parent = mainFrame
+
+local contentCorner = Instance.new("UICorner")
+contentCorner.CornerRadius = UDim.new(0, 10)
+contentCorner.Parent = contentFrame
+
+local pages = {}
+local buttons = {}
+local currentPage = nil
+local minimized = false
+local performanceMode = false
+local brightMode = false
+local compactMode = false
+
+local function createPage(name)
+    local page = Instance.new("Frame")
+    page.Name = name .. "Page"
+    page.Size = UDim2.new(1, 0, 1, 0)
+    page.BackgroundTransparency = 1
+    page.Visible = false
+    page.Parent = contentFrame
+
+    local layout = Instance.new("UIListLayout")
+    layout.Padding = UDim.new(0, 10)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Parent = page
+
+    local padding = Instance.new("UIPadding")
+    padding.PaddingTop = UDim.new(0, 14)
+    padding.PaddingLeft = UDim.new(0, 14)
+    padding.PaddingRight = UDim.new(0, 14)
+    padding.PaddingBottom = UDim.new(0, 14)
+    padding.Parent = page
+
+    pages[name] = page
+    return page
+end
+
+local function setPage(name)
+    currentPage = name
+    for pageName, page in pairs(pages) do
+        page.Visible = pageName == name
+    end
+    for tabName, button in pairs(buttons) do
+        button.BackgroundColor3 = tabName == name and Color3.fromRGB(37, 99, 235) or Color3.fromRGB(30, 41, 59)
+        button.TextColor3 = tabName == name and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(203, 213, 225)
+    end
+end
+
+local function createTab(name, order)
+    local button = Instance.new("TextButton")
+    button.Name = name .. "Tab"
+    button.Size = UDim2.new(1, 0, 0, 38)
+    button.BackgroundColor3 = Color3.fromRGB(30, 41, 59)
+    button.BorderSizePixel = 0
+    button.AutoButtonColor = false
+    button.Font = Enum.Font.GothamSemibold
+    button.Text = name
+    button.TextColor3 = Color3.fromRGB(203, 213, 225)
+    button.TextSize = 13
+    button.LayoutOrder = order
+    button.Parent = tabsFrame
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = button
+
+    button.MouseButton1Click:Connect(function()
+        setPage(name)
+    end)
+
+    buttons[name] = button
+    return button
+end
+
+local function createLabel(parent, text)
+    local label = Instance.new("TextLabel")
+    label.Name = "Label"
+    label.Size = UDim2.new(1, 0, 0, 24)
+    label.BackgroundTransparency = 1
+    label.Font = Enum.Font.GothamSemibold
+    label.Text = text
+    label.TextColor3 = Color3.fromRGB(226, 232, 240)
+    label.TextSize = 14
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = parent
+    return label
+end
+
+local function createInfo(parent, text)
+    local label = Instance.new("TextLabel")
+    label.Name = "Info"
+    label.Size = UDim2.new(1, 0, 0, 42)
+    label.BackgroundColor3 = Color3.fromRGB(30, 41, 59)
+    label.BorderSizePixel = 0
+    label.Font = Enum.Font.Gotham
+    label.Text = text
+    label.TextColor3 = Color3.fromRGB(203, 213, 225)
+    label.TextSize = 12
+    label.TextWrapped = true
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = parent
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = label
+
+    local padding = Instance.new("UIPadding")
+    padding.PaddingLeft = UDim.new(0, 10)
+    padding.PaddingRight = UDim.new(0, 10)
+    padding.Parent = label
+
+    return label
+end
+
+local function createButton(parent, text, callback)
+    local button = Instance.new("TextButton")
+    button.Name = text:gsub("%W", "") .. "Button"
+    button.Size = UDim2.new(1, 0, 0, 38)
+    button.BackgroundColor3 = Color3.fromRGB(37, 99, 235)
+    button.BorderSizePixel = 0
+    button.AutoButtonColor = false
+    button.Font = Enum.Font.GothamSemibold
+    button.Text = text
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.TextSize = 13
+    button.Parent = parent
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = button
+
+    button.MouseEnter:Connect(function()
+        TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(59, 130, 246)}):Play()
+    end)
+
+    button.MouseLeave:Connect(function()
+        TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(37, 99, 235)}):Play()
+    end)
+
+    button.MouseButton1Click:Connect(function()
+        local ok, err = pcall(callback)
+        if not ok then
+            warn("[StablePanel]", err)
+        end
+    end)
+
+    return button
+end
+
+local function createToggle(parent, text, default, callback)
+    local state = default == true
+    local button = Instance.new("TextButton")
+    button.Name = text:gsub("%W", "") .. "Toggle"
+    button.Size = UDim2.new(1, 0, 0, 38)
+    button.BackgroundColor3 = state and Color3.fromRGB(22, 163, 74) or Color3.fromRGB(51, 65, 85)
+    button.BorderSizePixel = 0
+    button.AutoButtonColor = false
+    button.Font = Enum.Font.GothamSemibold
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.TextSize = 13
+    button.Parent = parent
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = button
+
+    local function render()
+        button.Text = text .. ": " .. (state and "ON" or "OFF")
+        TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = state and Color3.fromRGB(22, 163, 74) or Color3.fromRGB(51, 65, 85)}):Play()
+    end
+
+    button.MouseButton1Click:Connect(function()
+        state = not state
+        render()
+        local ok, err = pcall(callback, state)
+        if not ok then
+            warn("[StablePanel]", err)
+        end
+    end)
+
+    render()
+    return button
+end
+
+local homePage = createPage("Home")
+local visualPage = createPage("Visual")
+local configPage = createPage("Config")
+
+createTab("Home", 1)
+createTab("Visual", 2)
+createTab("Config", 3)
+
+createLabel(homePage, "Painel")
+createInfo(homePage, "Painel carregado com segurança, sem executar códigos externos automaticamente.")
+createButton(homePage, "Recentralizar Painel", function()
+    mainFrame.Position = UDim2.new(0.5, -260, 0.5, -180)
+end)
+createButton(homePage, "Reabrir Tamanho Normal", function()
+    minimized = false
+    tabsFrame.Visible = true
+    contentFrame.Visible = true
+    version.Visible = true
+    mainFrame.Size = UDim2.new(0, 520, 0, 360)
+    mainFrame.Position = UDim2.new(0.5, -260, 0.5, -180)
+    minimizeButton.Text = "-"
+end)
+
+createLabel(visualPage, "Visual")
+createToggle(visualPage, "Modo Performance", false, function(value)
+    performanceMode = value
+    if value then
+        settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+        Lighting.GlobalShadows = false
+        Lighting.FogEnd = 100000
+    else
+        settings().Rendering.QualityLevel = Enum.QualityLevel.Automatic
+        Lighting.GlobalShadows = originalLighting.GlobalShadows
+        Lighting.FogEnd = originalLighting.FogEnd
+    end
+end)
+createToggle(visualPage, "Brilho Estável", false, function(value)
+    brightMode = value
+    if value then
+        Lighting.Brightness = 2
+        Lighting.ClockTime = 14
+        Lighting.Ambient = Color3.fromRGB(180, 180, 180)
+        Lighting.OutdoorAmbient = Color3.fromRGB(180, 180, 180)
+    else
+        Lighting.Brightness = originalLighting.Brightness
+        Lighting.ClockTime = originalLighting.ClockTime
+        Lighting.Ambient = originalLighting.Ambient
+        Lighting.OutdoorAmbient = originalLighting.OutdoorAmbient
+    end
+end)
+createToggle(visualPage, "Interface Compacta", false, function(value)
+    compactMode = value
+    if value then
+        mainFrame.Size = UDim2.new(0, 430, 0, 300)
+        mainFrame.Position = UDim2.new(0.5, -215, 0.5, -150)
+        tabsFrame.Size = UDim2.new(0, 110, 1, -70)
+        contentFrame.Position = UDim2.new(0, 134, 0, 70)
+        contentFrame.Size = UDim2.new(1, -150, 1, -70)
+    else
+        mainFrame.Size = UDim2.new(0, 520, 0, 360)
+        mainFrame.Position = UDim2.new(0.5, -260, 0.5, -180)
+        tabsFrame.Size = UDim2.new(0, 132, 1, -70)
+        contentFrame.Position = UDim2.new(0, 156, 0, 70)
+        contentFrame.Size = UDim2.new(1, -172, 1, -70)
+    end
+end)
+
+createLabel(configPage, "Config")
+createInfo(configPage, "Pressione RightShift para mostrar ou esconder o painel.")
+createButton(configPage, "Restaurar Iluminação", function()
+    Lighting.Ambient = originalLighting.Ambient
+    Lighting.Brightness = originalLighting.Brightness
+    Lighting.ClockTime = originalLighting.ClockTime
+    Lighting.FogEnd = originalLighting.FogEnd
+    Lighting.GlobalShadows = originalLighting.GlobalShadows
+    Lighting.OutdoorAmbient = originalLighting.OutdoorAmbient
+end)
+createButton(configPage, "Fechar Painel", function()
+    screenGui:Destroy()
+end)
+
+local dragging = false
+local dragStart = nil
+local startPos = nil
+
+titleBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then
+        return
+    end
+    if input.KeyCode == Enum.KeyCode.RightShift then
+        mainFrame.Visible = not mainFrame.Visible
+    end
+end)
+
+minimizeButton.MouseButton1Click:Connect(function()
+    minimized = not minimized
+    if minimized then
+        tabsFrame.Visible = false
+        contentFrame.Visible = false
+        version.Visible = false
+        mainFrame.Size = UDim2.new(0, 520, 0, 48)
+        minimizeButton.Text = "+"
+    else
+        tabsFrame.Visible = true
+        contentFrame.Visible = true
+        version.Visible = true
+        mainFrame.Size = compactMode and UDim2.new(0, 430, 0, 300) or UDim2.new(0, 520, 0, 360)
+        minimizeButton.Text = "-"
+    end
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
+RunService.RenderStepped:Connect(function()
+    if not screenGui.Parent then
+        return
+    end
+    if performanceMode then
+        Lighting.GlobalShadows = false
+    end
+    if brightMode then
+        Lighting.Brightness = 2
+        Lighting.ClockTime = 14
+    end
+end)
+
+setPage("Home")
